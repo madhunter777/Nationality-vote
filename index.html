@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>European Country Voting</title>
+  <style>
+    body { font-family: Arial; background: #000; color: #fff; text-align: center; }
+    .country { margin: 20px 0; }
+    .bar { height: 30px; background: #333; border-radius: 10px; overflow: hidden; width: 80%; margin: 5px auto; }
+    .fill { height: 30px; background: limegreen; width: 0%; transition: width 0.3s; }
+    button { padding: 8px 18px; margin-top: 5px; font-size: 16px; }
+    img.flag { width: 50px; height: auto; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <h1>Vote for Your Country!</h1>
+  <div id="countries"></div>
+
+  <script>
+    const countries = [
+      "Albania", "Andorra", "Armenia", "Austria", "Azerbaijan", "Belarus", "Belgium", "Bosnia and Herzegovina",
+      "Bulgaria", "Croatia", "Cyprus", "Czech Republic", "Denmark", "Estonia", "Finland", "France", "Georgia",
+      "Germany", "Greece", "Hungary", "Iceland", "Ireland", "Italy", "Kazakhstan", "Kosovo", "Latvia",
+      "Liechtenstein", "Lithuania", "Luxembourg", "Malta", "Moldova", "Monaco", "Montenegro", "Netherlands",
+      "North Macedonia", "Norway", "Poland", "Portugal", "Romania", "Russia", "San Marino", "Serbia", "Slovakia",
+      "Slovenia", "Spain", "Sweden", "Switzerland", "Turkey", "Ukraine", "United Kingdom", "Vatican City"
+    ];
+
+    const countryCodes = [
+      "AL", "AD", "AM", "AT", "AZ", "BY", "BE", "BA", "BG", "HR", "CY", "CZ", "DK", "EE", "FI", "FR", "GE", "DE",
+      "GR", "HU", "IS", "IE", "IT", "KZ", "XK", "LV", "LI", "LT", "LU", "MT", "MD", "MC", "ME", "NL", "MK", "NO",
+      "PL", "PT", "RO", "RU", "SM", "RS", "SK", "SI", "ES", "SE", "CH", "TR", "UA", "GB", "VA"
+    ];
+
+    let votes = {};
+    countryCodes.forEach(code => votes[code] = 0);
+
+    function render() {
+      const total = Object.values(votes).reduce((a, b) => a + b, 0);
+      const div = document.getElementById("countries");
+      div.innerHTML = "";
+      countryCodes.forEach((code, index) => {
+        const name = countries[index];
+        const percent = total ? ((votes[code] / total) * 100).toFixed(1) : 0;
+        div.innerHTML += `
+          <div class="country">
+            <strong>${index + 1}. ${name}</strong><br>
+            <img src="https://flagcdn.com/w40/${code.toLowerCase()}.png" alt="${name}" class="flag"><br>
+            <div class="bar"><div class="fill" style="width:${percent}%"></div></div>
+            <small>${votes[code]} votes (${percent}%)</small><br>
+            <button onclick="vote('${code}')">Vote for ${name}</button>
+          </div>`;
+      });
+    }
+
+    function vote(code) {
+      votes[code]++;
+      render();
+    }
+
+    render();
+  </script>
+</body>
+</html>
